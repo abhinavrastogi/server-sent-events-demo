@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Test</title>
+  </head>
+  <body>
+    hello world
+    <ul id="messages"></ul>
+    <script>
+      const eventSource = new EventSource("/alerts");
+      eventSource.onmessage = function (event) {
+        const newElement = document.createElement("li");
+        const eventList = document.getElementById("messages");
+
+        newElement.innerHTML = event.data;
+        eventList.appendChild(newElement);
+      };
+    </script>
+  </body>
+</html>
