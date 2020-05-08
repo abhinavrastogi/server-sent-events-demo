@@ -7,25 +7,28 @@ let clients = [];
 app.use(express.static(__dirname + "/"));
 
 app.get("/alerts", function (req, res) {
+  // generate client id
+  const clientId = Date.now();
+  console.log(`connected client with id ${clientId}`);
+
+  // start event stream
   res.writeHead(200, {
     Connection: "keep-alive",
     "Content-Type": "text/event-stream",
     "Cache-Control": "no-cache",
   });
 
-  const clientId = Date.now();
+  // save client ref so that we can push events on trigger
   clients.push({
     id: clientId,
     res: res,
   });
-  console.log(`connected client with id ${clientId}`);
 
+  // handle dropped connections
   req.on("close", () => {
     console.log(`dropped client with id ${clientId}`);
     clients = clients.filter((c) => c.id !== clientId);
   });
-
-  setInterval(function () {}, 2000);
 });
 
 app.get("/trigger", (req, res) => {
