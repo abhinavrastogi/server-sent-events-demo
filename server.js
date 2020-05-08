@@ -18,6 +18,9 @@ app.get("/alerts", function (req, res) {
     "Cache-Control": "no-cache",
   });
 
+  // optionally acknowledge client
+  res.write("connected");
+
   // save client ref so that we can push events on trigger
   clients.push({
     id: clientId,

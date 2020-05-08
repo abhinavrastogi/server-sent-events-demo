@@ -4,13 +4,20 @@
   </head>
   <body>
     hello world
-    <ul id="messages"></ul>
+    <div id="messages"></div>
+
     <script>
       const eventSource = new EventSource("/alerts");
-      eventSource.onmessage = function (event) {
-        const newElement = document.createElement("li");
-        const eventList = document.getElementById("messages");
+      const eventList = document.getElementById("messages");
 
+      eventSource.onopen = function (event) {
+        const newElement = document.createElement("p");
+        newElement.innerHTML = "Stream connected";
+        eventList.appendChild(newElement);
+      };
+
+      eventSource.onmessage = function (event) {
+        const newElement = document.createElement("p");
         newElement.innerHTML = event.data;
         eventList.appendChild(newElement);
       };
